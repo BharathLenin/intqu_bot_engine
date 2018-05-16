@@ -1,0 +1,37 @@
+ToplaKrv * = has | no
+Feather * = has | no
+LijezeJaja * = yes no
+JedeMeso * = yes | no
+OstriZubi * = has | no
+Kandze * = yes no
+Kopita * = has | no
+Point * = yes | no
+Striped * = yes | no
+Size * = small | medium | big
+Udomacena * = yes | no
+VoliSeMaziti * = yes | no
+Longcut * = yes | no
+Flights * = yes no
+Pliva * = yes no
+ImaRogove * = yes | no
+InterlacedStop * = yes | no
+Rod Animals * = bird | mammal
+Species Animals * = cat kopitar
+Nutrition * = carnivore | herbivorous
+Animal * = leopard | tiger | kucna_macka | zirafa | noj | zebra | bull | penguin | albatros | duck
+-----
+IF ToplaKrv = has THEN Rod Animals = mammal
+IF Perry = Has & Ice Cream = yes THEN Rod Animals = Bird
+IF Rod Animals = Mammal & JedeMeso = yes THEN Nutrition = Carcase
+IF Nutrition = Carnival & Cuts = Cats & Candies = yes THEN Species = cat
+IF Diet = Carcase & Rod Animals = Mammals & Crust = Have THEN Species = Equestrian
+IF Species Animals = cat & Spot = yes & Size = Large THEN Animal = leopard
+IF Species Animals = cat & Striped = yes & Size = large THEN Animal = tiger
+IF Species = cat & Size = small & Udomacena = yes & VoliSeMaziti = yes THEN Animal = kucna_macka
+IF Species = Equestrian & Striped = yes THEN Animal = Zebra
+IF Species Animals = Equestrian & Wheat = yes & Longfoot = yes THEN Animal = Zirafa
+IF Species Animals = Equestrian & ImaRogove = yes THEN Animal = bull
+IF RodZivotinje = bird & Pliva = no & Fly = no THEN Animal = ost
+IF Rod Animals = bird & Pliva = yes & Flights = no THEN Animal = penguin
+IF Rod Animals = Bird & Flights = Yes & Interlaced Stop = yes THEN Animal = albatros
+IF Rod Animals = Bird & Flights = Yes & Interlaced Stop = yes THEN Animal = Duck

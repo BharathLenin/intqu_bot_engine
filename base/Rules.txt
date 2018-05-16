@@ -1,0 +1,6 @@
+tag = img | div | span | p | svg
+attr = src | alt | height | width
+design = responsive | unresponsive
+--------------------------
+IF tag = img & attr = alt THEN action = Add alt
+IF tag = img & design = responsive THEN action = Implement SVG
