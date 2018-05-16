@@ -1,17 +1,7 @@
-Expert System
+Intqu_Bot_engine
 =============
 
-Simple expert system written in Python.
-
-This project was a part of Educational weekend for high school students at FER, Croatia. 
-Presentation and all comments are in Croatian.
-
-## Files
-
-### Presentation
-
-- Presentation.pdf: a brief introduction to expert systems
-- Presentation.tex: presentation source code
+# Files
 
 ### Code
 
