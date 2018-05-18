@@ -9,55 +9,94 @@ functional expert system.
 '''
 from src import Eparser
 
+
 ############################################################################################
-#                                    POMOCNE FUNKCIJE                                      #
+#                                    AUXILIARY FUNCTIONS                                      #
 ############################################################################################
 
 # the function returns a string with the rule in a read-only format,
-# odnosno:  IF condition THEN action 
+# odnosno:  IF condition THEN action
 def rule_repr(rule):
     LHS = []
-    for attr,values in rule['LHS'].items():
+    for attr, values in rule['LHS'].items():
         LHS.append(attr + " = " + "|".join(values))
     for key, elem in rule['RHS'].items():
-        (RHSkey,RHSelem) = (key,elem)
-        #print(key,elem)
-    #(RHSkey,RHSvalue) = rule['RHS'].items()[0]
-    
+        (RHSkey, RHSelem) = (key, elem)
+        # print(key,elem)
+    # (RHSkey,RHSvalue) = rule['RHS'].items()[0]
+
     return "IF " + " & ".join(LHS) + " THEN " + RHSkey + " = " + RHSelem
 
-# Funkcija ispisuje radnu memoriju
-def printRM():
-    print ("Radna memorija:")
-    for r,v in RM.items():
-        print (r, " = ", v)
 
-# Funkcija vraca listu svih konfliktnih pravila, odnosno pravila cija desna strana 
-# izvodi vrijednost danog parametra
-def getConflictRules(rules,goal):
+# The function prints the operating memory
+def printRM():
+    #print("Working Memory")
+    for r, v in RM.items():
+        print(r, " = ", v)
+
+# The function returns a list of all conflicting rules, ie the rules of the right side
+# performs the value of a given parameter
+
+def getMatchingRules(rules, goal):
+    ruleset = []
+    for rule in rules:
+        a=0
+        for key, value in rule['LHS'].items():
+            att = ''.join(value)
+            if '*' in att:
+                att = att[1:]
+                if att not in goal:
+                #print('attribute value '+att)
+                    a+=1
+            else:
+                if att in goal:
+                #print('attribute value '+att)
+                    a+=1
+        if a==len(rule['LHS']):
+            ruleset.append(rule)
+    return ruleset
+
+def getMatchingRuleAction(rules):
+    for rule in rules:
+        for key, value in rule['RHS'].items():
+            key = ''.join(key)
+            if key == 'action':
+                value = ''.join(value)
+            else:
+                print('No actions defined yet')
+    return value
+
+
+# The function returns a list of all conflicting rules, ie the rules of the right side
+# performs the value of a given parameter
+
+def getConflictRules(rules, goal):
     ruleset = []
     for rule in rules:
         attribute = rule['RHS'].keys()[0]
         if attribute == goal:
-            ruleset.append(rule)            
+            ruleset.append(rule)
     return ruleset
 
-# Funkcija provjerava postoji li barem jedno pravilo cija desna strana 
-# izvodi vrijednost danog cilja
-def conflictRuleExists(rules,goal):
+
+# The function returns a list of all conflicting rules, ie the rules of the right side
+# performs the value of a given parameter
+
+def conflictRuleExists(rules, goal):
     for rule in rules:
         attribute = rule['RHS'].keys()[0]
         if attribute == goal:
-            return True        
+            return True
     return False
 
 
-# Funkcija provjerava da li dano pravilo pali
-# Drugim rijecima, ako su svi atributi s lijeve strane pravila u 
-# radnoj memoriji i imaju jednake vrijednosti
-def ruleWorks(rule,RM):
+# The function checks if the given rule is set to fire
+# In other words, if all the attributes on the left side of the rule are in
+# work memory and have the same values
+
+def ruleWorks(rule, RM):
     conditions = rule['LHS']
-    
+
     for param in conditions:
         if param in RM:
             if RM[param] not in conditions[param]:
@@ -66,33 +105,36 @@ def ruleWorks(rule,RM):
             return False
     return True
 
-# Funkcija za korisnicki unos zadanog parametra u radnu memoriju
-# Zahtjeva unos dok korisnik ne unese jedan od dopustenih vrijednosti
-# Napomena: korisnicki unos moguc je samo za parametre cije ime zavrsava sa znakom '*' 
-def parameterInput(param,RM):
-    value = input("Molim unesite vrijednost parametra '" + param + "' " + str(parameters[param+"*"]))
-    while(value not in parameters[param+"*"]):
+
+# User input function of the default parameter in the working memory
+# Requests entry until the user inputs one of the permissible values
+# Note: A user input is only possible for parameters whose name ends with the '*'
+
+def parameterInput(param, RM):
+    value = input("Please enter a parameter value '" + param + "' " + str(parameters[param + "*"]))
+    while (value not in parameters[param + "*"]):
         value = input()
     RM[param] = value
-    
-    
-# Funkcija ispisuje atribute/parametre, njihove vrijednosti
-# i sva pravila sadrzana u bazi znanja
-def printKnowledgeBase(parameters,rules):
-    print( '-'*105)
-    print ('|' + '\t'*6 + 'The Knowledge Base' + '\t'*6 + '|')
-    print ('-'*105 + '\n')
-    
-    print ("Attribute:")
-    for attr,value in parameters.items():
-        print (attr + " = " + " | ".join(value))
-    
-    print ("\nRules:")
-    for i,rule in enumerate(rules):
-        print (str(i+1) + ") " + rule_repr(rule))
-        
-    print ('-'*105 + '\n')
-       
+
+
+# Function prints attributes / parameters, their values
+# and all rules contained in the knowledge base
+
+def printKnowledgeBase(parameters, rules):
+    print('-' * 105)
+    print('|' + '\t' * 6 + 'The Knowledge Base' + '\t' * 6 + '|')
+    print('-' * 105 + '\n')
+
+    print("Attribute:")
+    for attr, value in parameters.items():
+        print(attr + " = " + " | ".join(value))
+
+    print("\nRules:")
+    for i, rule in enumerate(rules):
+        print(str(i + 1) + ") " + rule_repr(rule))
+
+    print('-' * 105 + '\n')
+
 
 ############################################################################################
 #                                    GLAVNI PROGRAM                                        #
@@ -105,20 +147,20 @@ parameters, rules = Eparser.parse('../base/Rules.txt')
 printKnowledgeBase(parameters, rules)
 
 # work memory, stack with goals and lists of already verified attributes
-#whose value can not be exported
+# whose value can not be exported
 RM = {}
 goals = []
 checked_goals = []
 
 
-# Ask the user to enter the target hypothesis and save it to the top of that
-hipoteza = str(input())
-goals.append(hipoteza)
+# Request the user to enter the target hypothesis
+goal = input('Enter the Statement: ')
+goals.append(goal)
 
 # At the top, therefore, is the hypothesis to prove.
 # If the stack is empty then the END.
 # The main loop
-while(True):
+while (True):
 
     # If the stack is empty, he has left the loop
     if len(goals) == 0: break
@@ -130,8 +172,20 @@ while(True):
     goal = goals.pop()
 
     # create a set of conflict rules and store their number
-    KR = getConflictRules(rules,goal)
-    KN = len(KR)
+    matchingRules = getMatchingRules(rules, goal)
+    noOfMatchingRules = len(matchingRules)
+
+    if noOfMatchingRules == 0:
+        print ('Too little data')
+        break
+
+    print('Matching Rules:')
+    for cr in matchingRules:
+        print(rule_repr(cr))
+        action = getMatchingRuleAction(matchingRules)
+        print(action)
+
+    #printRM()
 
     # if no conflicting rule has been found, terminate the loop and notify the user
 
@@ -173,12 +227,7 @@ while(True):
 
     # If no new goal is set and all the rules are checked, remove the goal from the top
     # and store it in a list of goals that can not be achieved
-    break  
-    print ('-'*100)
-                    
-                    
-print ('*'*48 + "KRAJ RADA" + '*'*48)
-                    
-    
-    
-    
+    break
+    print('-' * 100)
+
+print('*' * 48 + "END OF WORK" + '*' * 48)
