@@ -1,3 +1,3 @@
 Add src = The src attribute specifies the location (URL) of the external resource.
 Add height = The height attribute specifies the height of the element, in pixels.
-Add alt = The required alt attribute specifies an alternate text for an image, if the image cannot be displayed. The alt attribute provides alternative information for an image if a user for some reason cannot view it (because of slow connection, an error in the src attribute, or if the user uses a screen reader).
+Add alt = 1. First and foremost a principle of web accessibility 2. Help for Visually impaired users 3. Help for SEO.

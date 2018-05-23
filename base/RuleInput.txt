@@ -1,1 +1,1 @@
-<img src="smiley.gif" height="42" width="42">
+<img src="images.png" alt="smiley-face" width="auto" height="auto">

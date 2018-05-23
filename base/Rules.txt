@@ -5,4 +5,9 @@ design = responsive | unresponsive
 IF tag = img & attr = *alt THEN action = Add alt
 IF tag = img & attr = alt THEN action = success
 IF tag = img & design = responsive THEN action = Implement SVG
+IF tag = input & attr = *name THEN action = Add name
+IF tag = input & attr = *value THEN action = Add value
+IF tag = input & attr = *id THEN action = Add id
 IF tag = img & attr = *src THEN action = Add src
+IF tag = img & attr = *width THEN action = Add width
+IF tag = img & attr = *height THEN action = Add height

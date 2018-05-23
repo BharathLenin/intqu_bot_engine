@@ -89,7 +89,7 @@ def fetchRuleByStatement(goal):
         noOfMatchingRules = len(matchingRules)
 
         if noOfMatchingRules == 0:
-            action = 'No Matching Rules Found'
+            action = 'No Matching Rules'
             print(action)
             break
 
@@ -103,6 +103,6 @@ def fetchRuleByStatement(goal):
         print('-' * 100)
 
     print('*' * 48 + "END OF WORK" + '*' * 48)
-    return action + '     ' + actiondesc
+    return action + ' ....................... CLICK TO VIEW BENEFITS ..................................................... ' + actiondesc
 
 
