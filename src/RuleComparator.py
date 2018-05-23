@@ -1,4 +1,7 @@
-from src import RuleInputReader
+'''
+This file is to compare the existing rules in Rules.txt with the new rule generated from expert input.
+If new rule not exists in Rules.txt then will add up to it.
+'''
 
 def getExistingRules(path):
     sides = []

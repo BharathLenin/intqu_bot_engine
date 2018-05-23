@@ -1,18 +1,5 @@
 '''
-A file parsing program that contains expert system knowledge.
-
-The files consist of rules and attributes.
-Rule format and attributes in files:
-
-attributes:
-    In the file: NameAtributa1 (*) = value1 | value2 | ...
-    In the memory: {'ImeAtributa1 (*)': ['vijednost1', 'vrijednost2', ...], ...}
-
-Rules:
-    In the file: IF attribute1 = value1 | value2 | ... & attribute2 = value1 | value2 | ... THEN attribute = value
-    In the memory: {'LHS': {'attribute1': ['value1', 'value2', ...], 'attribute2': ['value1', 'value2']}
-                  'RHS': {'attribute': 'value'}}
-
+A file parsing program for parsing Rules.txt
 '''
 
 import copy
@@ -29,7 +16,7 @@ def parse(path):
         return
     
     for line in lines:
-        if not line or line.startswith('-') or line.startswith('#'):
+        if not line or line.startswith('-') or line.startswith('#') or line.startswith('\n'):
             continue
         elif line.startswith('IF'):
             current = {}
@@ -41,10 +28,7 @@ def parse(path):
                 ruleList = list(map(str.strip, condition.split('=', 1)))
 
                 for a, b in itertools.combinations(ruleList, 2):
-                # print (a)
                     current['LHS'][a] = [s.strip() for s in b.split('|')]
-                #compare(a, b)
-
 
             action = sides[1]
             actionList = list(map(str.strip, action.split('=')))

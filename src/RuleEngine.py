@@ -1,27 +1,23 @@
 '''
-This file contains the expert system skeleton. All the code has been commented in detail
-By following the instructions in the comments, it's easy to build a simple one completely
-functional expert system.
-
+Engine which fetches and applies the appropriate rules from Rules.txt
 '''
+
 from src import Eparser
+from src import DescReader
 
 # the function returns a string with the rule in a read-only format,
-# odnosno:  IF condition THEN action
+
 def rule_repr(rule):
     LHS = []
     for attr, values in rule['LHS'].items():
         LHS.append(attr + " = " + "|".join(values))
     for key, elem in rule['RHS'].items():
         (RHSkey, RHSelem) = (key, elem)
-        # print(key,elem)
-    # (RHSkey,RHSvalue) = rule['RHS'].items()[0]
 
     return "IF " + " & ".join(LHS) + " THEN " + RHSkey + " = " + RHSelem
 
 
-# The function returns a list of all conflicting rules, ie the rules of the right side
-# performs the value of a given parameter
+# The function returns a list of all matching rules
 
 def getMatchingRules(rules, statement):
     ruleset = []
@@ -32,16 +28,15 @@ def getMatchingRules(rules, statement):
             if '*' in att:
                 att = att[1:]
                 if att not in statement:
-                #print('attribute value '+att)
                     a+=1
             else:
                 if att in statement:
-                #print('attribute value '+att)
                     a+=1
         if a==len(rule['LHS']):
             ruleset.append(rule)
     return ruleset
 
+# The function returns actions of all matching rules from knowledge base
 def getMatchingRuleAction(rules):
     for rule in rules:
         for key, value in rule['RHS'].items():
@@ -78,49 +73,36 @@ def fetchRuleByStatement(goal):
     # prints a knowledge base
     printKnowledgeBase(parameters, rules)
 
-    # work memory, stack with goals and lists of already verified attributes
-    # whose value can not be exported
-    RM = {}
     goals = []
-    checked_goals = []
-
-    # Request the user to enter the target hypothesis
-    #goal = input('Enter the Statement: ')
+    action = ''
+    actiondesc = ''
     goals.append(goal)
 
-    # At the top, therefore, is the hypothesis to prove.
-    # If the stack is empty then the END.
     # The main loop
     while (True):
 
-        # If the stack is empty, he has left the loop
+        # If the stack is empty, leave he loop
         if len(goals) == 0: break
-        # pomocne kontrolne varijable
-        new_goal = False
-        new_parameter = False
 
-        # save the target goal in the variable goal
-        goal = goals.pop()
-
-        # create a set of conflict rules and store their number
+        # create a set of matching rules and store number of matching rules
         matchingRules = getMatchingRules(rules, goal)
         noOfMatchingRules = len(matchingRules)
 
         if noOfMatchingRules == 0:
-            print('Too little data')
+            action = 'No Matching Rules Found'
+            print(action)
             break
 
         print('Matching Rules:')
         for cr in matchingRules:
             print(rule_repr(cr))
             action = getMatchingRuleAction(matchingRules)
-            print(action)
-
-
+            actiondesc = DescReader.fileParse('../base/Description.txt',action)
+            print(actiondesc)
         break
         print('-' * 100)
 
     print('*' * 48 + "END OF WORK" + '*' * 48)
-    return action
+    return action + '     ' + actiondesc
 
 

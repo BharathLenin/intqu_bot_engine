@@ -1,3 +1,7 @@
+'''
+File to read and convert the expert input to rule
+'''
+
 import itertools
 
 def parse(path):
